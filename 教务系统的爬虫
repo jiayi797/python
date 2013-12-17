@@ -58,8 +58,30 @@ class SDU_Spider:
         self.postdata=urllib.urlencode({'stuid':'2012210031','pwd':'老师我怎么能告诉你密码'})     # POST的数据  
         self.weights = []   #存储权重，也就是学分  
         self.points = []    #存储分数，也就是成绩  
-        self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cookieJar))  
-  
+        self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cookieJar))
+#-----------------------------------------------------------------------------------------------------
+两个重要概念：Openers和Handlers。
+1.Openers：
+当你获取一个URL你使用一个opener(一个urllib2.OpenerDirector的实例)。
+正常情况下，我们使用默认opener：通过urlopen。
+但你能够创建个性的openers。
+2.Handles：
+Openers使用处理器handlers，所有的“繁重”工作由handlers处理。
+每个handlers知道如何通过特定协议打开URLs，或者如何处理URL打开时的各个方面。
+例如HTTP重定向或者HTTP cookies。
+
+如果你希望用特定处理器获取URLs你会想创建一个openers，例如获取一个能处理cookie的opener，或者获取一个不重定向的opener。
+
+要创建一个 opener，可以实例化一个OpenerDirector，
+然后调用.add_handler(some_handler_instance)。
+同样，可以使用build_opener，这是一个更加方便的函数，用来创建opener对象，他只需要一次函数调用。
+build_opener默认添加几个处理器，但提供快捷的方法来添加或更新默认处理器。
+其他的处理器handlers你或许会希望处理代理，验证，和其他常用但有点特殊的情况。
+
+install_opener 用来创建（全局）默认opener。这个表示调用urlopen将使用你安装的opener。
+Opener对象有一个open方法。
+该方法可以像urlopen函数那样直接用来获取urls：通常不必调用install_opener，除了为了方便。
+#-----------------------------------------------------------------------------------------------------  
     def sdu_init(self):  
         # 初始化链接并且获取cookie  
         myRequest = urllib2.Request(url = self.loginUrl,data = self.postdata)   # 自定义一个请求  
